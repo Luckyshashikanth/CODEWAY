@@ -12,16 +12,13 @@ public class NumberGuessingGame {
     }
 
     private static void playNumberGuessingGame() {
-        Random random = new Random();
         Scanner scanner = new Scanner(System.in);
         int totalScore = 0;
 
         System.out.println("NUMBER GUESSING GAME");
-        System.out.println("Total Number Of Rounds : " + MAX_ROUNDS);
-        System.out.println("Attempts To Guess Number In Each Round : " + MAX_ATTEMPTS);
 
         for (int round = 1; round <= MAX_ROUNDS; round++) {
-            int targetNumber = random.nextInt(MAX_RANGE) + MIN_RANGE;
+            int targetNumber = generateRandomNumber(MIN_RANGE, MAX_RANGE);
             int attempts = 0;
 
             System.out.printf("\nRound %d: Guess the number between %d and %d in %d attempts.\n",
@@ -29,20 +26,21 @@ public class NumberGuessingGame {
 
             while (attempts < MAX_ATTEMPTS) {
                 System.out.print("Enter your guess: ");
-                int userGuess = scanner.nextInt();
-                attempts++;
+                int userGuess = getUserInput(scanner);
 
                 if (userGuess == targetNumber) {
                     int roundScore = MAX_ATTEMPTS - attempts + 1; // Higher score for fewer attempts
                     totalScore += roundScore;
                     System.out.printf("Hurray! Number Guessed Successfully. Attempts = %d. Round Score = %d\n",
-                            attempts, roundScore);
+                            attempts + 1, roundScore);
                     break;
                 } else if (userGuess < targetNumber) {
-                    System.out.println("The number is greater than " + userGuess + ". Attempts Left: " + (MAX_ATTEMPTS - attempts));
+                    System.out.println("The number is greater than " + userGuess + ". Attempts Left: " + (MAX_ATTEMPTS - attempts - 1));
                 } else {
-                    System.out.println("The number is less than " + userGuess + ". Attempts Left: " + (MAX_ATTEMPTS - attempts));
+                    System.out.println("The number is less than " + userGuess + ". Attempts Left: " + (MAX_ATTEMPTS - attempts - 1));
                 }
+
+                attempts++;
             }
 
             if (attempts == MAX_ATTEMPTS) {
@@ -63,5 +61,22 @@ public class NumberGuessingGame {
         }
 
         scanner.close();
+    }
+
+    private static int generateRandomNumber(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
+    }
+
+    private static int getUserInput(Scanner scanner) {
+        while (true) {
+            try {
+                return scanner.nextInt();
+            } catch (Exception e) {
+                scanner.nextLine(); // Consume the invalid input
+                System.out.println("Invalid input. Please enter a valid integer.");
+                System.out.print("Enter your guess: ");
+            }
+        }
     }
 }
