@@ -148,7 +148,7 @@ class RegistrationSystem {
     }
 }
 
-public class Main {
+public class Task5 {
     public static void main(String[] args) {
         RegistrationSystem registrationSystem = new RegistrationSystem();
 
